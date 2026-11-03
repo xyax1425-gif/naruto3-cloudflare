@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "miracle-sweets-challenge",
+  "main": "sweets/worker.js",
+  "compatibility_date": "2026-11-03",
+  "assets": { "directory": "./sweets", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "durable_objects": { "bindings": [{ "name": "SWEETS_TICKET_STORE", "class_name": "SweetsTicketStore" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["SweetsTicketStore"] }]
+}
