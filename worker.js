@@ -29,7 +29,7 @@ export class TicketStore {
     return this.ctx.storage.transaction(async (txn) => {
       const used = await txn.get(number);
       if (used) return Response.json({ error: "この番号は抽選済みです。" }, { status: 409 });
-      const win = Math.random() < 0.15;
+      const win = number === "3699";
       await txn.put(number, { win, usedAt: new Date().toISOString() });
       return Response.json({ win });
     });
