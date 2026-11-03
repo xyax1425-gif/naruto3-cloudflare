@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ff8ac7">
+<title>ミラクルスイーツチャレンジ</title>
+<style>
+:root{--pink:#ff7fc5;--purple:#9b72ff;--mint:#76ead1;--yellow:#ffe76b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;padding:22px 16px;display:grid;place-items:center;overflow-x:hidden;font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:#60365f;background:radial-gradient(ellipse at 50% 8%,#fff7c9 0%,transparent 36%),radial-gradient(ellipse at 12% 80%,#ffc5e8 0%,transparent 36%),linear-gradient(145deg,#a8f5ed,#d9c5ff 52%,#ffb9db)}
+.wrap{width:100%;max-width:620px}.card{position:relative;text-align:center;padding:34px 28px 27px;border:4px solid #fff;border-radius:34px;background:linear-gradient(155deg,#fffdf8ed,#fff0f8ed);box-shadow:0 14px 45px #8c55a644,inset 0 0 0 2px #ffc3e6}
+.kicker{margin:0 0 9px;font-size:13px;font-weight:1000;letter-spacing:.24em;color:#a45ed0}
+h1{margin:0;color:#a34ac1;font-size:clamp(29px,7vw,43px);line-height:1.25;text-shadow:2px 3px 0 #ffe0f3}
+.sub{margin:10px 0 18px;font-weight:800;color:#8b6393}
+.candy-scene{height:120px;position:relative;margin:0 auto 12px;max-width:390px;display:flex;align-items:center;justify-content:center;gap:15px;font-size:clamp(43px,10vw,65px);filter:drop-shadow(0 5px 3px #b76bb544)}
+.candy-scene span{display:inline-block;animation:bob 2s ease-in-out infinite}.candy-scene span:nth-child(2){animation-delay:.25s}.candy-scene span:nth-child(3){animation-delay:.5s}.candy-scene span:nth-child(4){animation-delay:.75s}
+@keyframes bob{50%{transform:translateY(-10px) rotate(8deg)}}
+.instructions{margin:10px 0 8px;text-align:left;font-weight:900}
+input{width:100%;height:65px;border:3px solid #f4a7d6;border-radius:17px;background:#fff;color:#633c68;font-size:27px;letter-spacing:.2em;text-align:center;outline:none}
+input:focus{border-color:#a979ef;box-shadow:0 0 0 4px #c9a5ff55}
+button{width:100%;min-height:68px;margin:17px 0 0;padding:12px;border:3px solid #fff;border-radius:999px;background:linear-gradient(100deg,#ff6fba,#ffb2a8,#ffe66d,#78e8d1,#8b8aff,#e28bff);background-size:250% 100%;color:#63315f;font:1000 clamp(19px,5vw,25px) inherit;letter-spacing:.03em;box-shadow:0 7px 0 #c078bd,0 0 22px #ff8ed6aa;animation:rainbow 3s linear infinite,glow 1.5s ease-in-out infinite alternate;cursor:pointer}
+@keyframes rainbow{to{background-position:250% 0}}@keyframes glow{to{filter:brightness(1.13);box-shadow:0 7px 0 #c078bd,0 0 35px #ff8ed6}}
+button:disabled{opacity:.7;animation:none}
+.note{margin:20px 0 0;font-size:12px;line-height:1.8;color:#927b99}
+#result{display:none;margin-top:18px;padding:18px 12px;border:2px dashed #e7a3d7;border-radius:20px;background:#fff8fd}
+#result.show{display:block;animation:pop .4s ease-out}#resultTitle{margin:0 0 8px;color:#e34ca5;font-size:27px}#resultText{margin:0;font-weight:800;line-height:1.7}
+#screenshotNote{display:none;margin:12px 0 0;color:#a34ac1;font-weight:1000}
+.confetti{position:fixed;top:-50px;z-index:5;pointer-events:none;font-size:30px;animation:fall var(--dur) ease-in forwards}
+@keyframes fall{to{transform:translate3d(var(--dx),110vh,0) rotate(720deg);opacity:.95}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@media(max-width:420px){.card{padding:27px 19px 22px;border-radius:27px}.candy-scene{height:100px}.sub{font-size:13px}input{height:59px;font-size:24px}button{min-height:61px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap"><section class="card">
+<p class="kicker">SWEET LUCKY CHALLENGE</p>
+<h1>ミラクルスイーツ<br>チャレンジ</h1>
+<p class="sub">お菓子の国で、幸運をつかもう！</p>
+<div class="candy-scene" aria-hidden="true"><span>🍭</span><span>🍬</span><span>🍫</span><span>🍩</span></div>
+<p class="instructions">くじ券の番号（4桁）</p>
+<input id="ticketNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="番号を入力" aria-label="抽選番号">
+<button id="draw" type="button">🌈 ミラクル抽選スタート！</button>
+<section id="result" aria-live="polite"><h2 id="resultTitle"></h2><p id="resultText"></p><p id="screenshotNote">📸 スクリーンショットを撮ってね！</p></section>
+<p class="note">番号1つにつき抽選は1回限りです。使用済みの番号は、別のスマホからも再使用できません。</p>
+</section></main>
+<script>
+const button=document.getElementById("draw"),input=document.getElementById("ticketNumber"),result=document.getElementById("result"),title=document.getElementById("resultTitle"),message=document.getElementById("resultText"),shot=document.getElementById("screenshotNote");
+function candyBurst(){const sweets=["🍬","🍭","🍫","🍩","🍪","🧁","🍡","🍰","🍓","✨"];for(let i=0;i<42;i++){const el=document.createElement("span");el.className="confetti";el.textContent=sweets[Math.floor(Math.random()*sweets.length)];el.style.left=Math.random()*100+"vw";el.style.setProperty("--dx",(Math.random()-.5)*240+"px");el.style.setProperty("--dur",(2.1+Math.random()*2.2)+"s");el.style.animationDelay=Math.random()*.5+"s";document.body.appendChild(el);setTimeout(()=>el.remove(),5000)}}
+button.addEventListener("click",async()=>{const number=input.value.trim();if(!/^\d{4}$/.test(number)){alert("抽選番号を4桁の数字で入力してください！");input.focus();return}button.disabled=true;input.disabled=true;button.textContent="🍬 抽選中…";try{const response=await fetch("/api/draw",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({number})});const data=await response.json();if(!response.ok)throw new Error(data.error||"抽選できませんでした");title.textContent=data.win?"🎉 大当たり！景品GET！":"今回ははずれ…";message.textContent=data.win?"おめでとうございます！景品をお受け取りください！":"参加ありがとう！またの挑戦をお待ちしています。";shot.style.display=data.win?"block":"none";result.classList.add("show");if(data.win)candyBurst();button.textContent="抽選終了"}catch(e){alert(e.message);button.disabled=false;input.disabled=false;button.textContent="🌈 ミラクル抽選スタート！"}});
+</script>
+</body>
+</html>
