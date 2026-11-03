@@ -123,7 +123,7 @@
       <div class="trial-orb" aria-hidden="true">火影の試練</div>
       <p class="chance">当選確率 15% ／ チャンスは1回だけ！</p>
       <p class="instructions">くじ券の番号</p>
-      <input id="ticketNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="番号を入力" aria-label="抽選番号">
+      <input id="ticketNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="番号を入力" aria-label="抽選番号">
       <button id="draw" type="button">運命の抽選をする！</button>
       <div class="burst" id="burst" aria-hidden="true">★　★　★</div>
       <section id="result" aria-live="polite">
@@ -145,7 +145,7 @@
     button.addEventListener("click", async () => {
       const number = ticketNumber.value.trim();
       if (!/^\d{1,20}$/.test(number)) {
-        alert("抽選番号を1〜20桁の数字で入力してください！");
+        alert("抽選番号を4桁の数字で入力してください！");
         ticketNumber.focus();
         return;
       }
@@ -154,7 +154,7 @@
       button.textContent = "抽選中…";
       burst.classList.add("on");
       try {
-        const response = await fetch("/.netlify/functions/draw", {
+        const response = await fetch("/api/draw", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ number })
