@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "naruto3-cloudflare",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-03",
+  "assets": { "directory": ".", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "durable_objects": { "bindings": [{ "name": "TICKET_STORE", "class_name": "TicketStore" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["TicketStore"] }]
+}
