@@ -129,7 +129,7 @@
       <section id="result" aria-live="polite">
         <h2 id="resultTitle"></h2>
         <p id="resultText"></p>
-        <p style="margin:14px 0 0;color:#ffd65a;font-weight:800;">スクリーンショットを撮ってね！</p>
+        <p id="screenshotNote" style="display:none;margin:14px 0 0;color:#ffd65a;font-weight:800;">スクリーンショットを撮ってね！</p>
       </section>
       <p class="note">番号1つにつき抽選は1回限りです。使用済みの番号は、別のスマホからも再使用できません。</p>
     </section>
@@ -142,6 +142,7 @@
     const message = document.getElementById("resultText");
     const ticketNumber = document.getElementById("ticketNumber");
     const burst = document.getElementById("burst");
+    const screenshotNote = document.getElementById("screenshotNote");
 
     button.addEventListener("click", async () => {
       const number = ticketNumber.value.trim();
@@ -166,6 +167,7 @@
         message.textContent = data.win
           ? "おめでとうございます！景品をお受け取りください！"
           : "参加ありがとう！またの挑戦をお待ちしています。";
+        screenshotNote.style.display = data.win ? "block" : "none";
         result.classList.add("show");
         button.textContent = "抽選終了";
       } catch (error) {
