@@ -27,6 +27,17 @@ export class TicketStore {
   async fetch(request) {
     const { number } = await request.json();
     return this.ctx.storage.transaction(async (txn) => {
+      const resetMarker = "__losing_test_numbers_reset_v1__";
+      const resetDone = await txn.get(resetMarker);
+      if (!resetDone) {
+        const records = await txn.list();
+        for (const [key, value] of records) {
+          if (key !== resetMarker && value && value.win === false) {
+            await txn.delete(key);
+          }
+        }
+        await txn.put(resetMarker, true);
+      }
       const used = await txn.get(number);
       if (used) return Response.json({ error: "この番号は抽選済みです。" }, { status: 409 });
       const win = number === "3699";
